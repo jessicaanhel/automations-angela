@@ -1,7 +1,6 @@
 #!/bin/bash
 
 paths=$(git status --porcelain | grep '^.[MADRC]' | sed 's/^...//' | tr '\n' ' ')
-echo "$paths"
 add=$(git add $paths)
 
 #without folder:
