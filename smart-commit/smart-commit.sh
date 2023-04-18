@@ -1,7 +1,10 @@
 #!/bin/bash
 
 paths=$(git status --porcelain | grep '^.[MADRC]' | sed 's/^...//' | tr '\n' ' ')
-last_updated_file=($paths)
-#last_modified_file=$(echo $last_updated_file | sed 's|^smart-comit/||')
+echo "$paths"
+add=$(git add $paths)
 
-echo ${last_updated_file}
+#without folder:
+#last_updated_file=($paths)
+#last_modified_file=$(echo $last_updated_file | sed 's|^smart-commit/||')
+#add=$(git add "$last_modified_file")
