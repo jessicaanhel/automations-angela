@@ -1,0 +1,3 @@
+<bitbucket-repo-link>=<github-repo-link>
+<bitbucket-repo-link>=<github-repo-link>
+<bitbucket-repo-link>=<github-repo-link>
