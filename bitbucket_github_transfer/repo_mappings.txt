@@ -1,3 +1,1 @@
-<bitbucket-repo-link>=<github-repo-link>
-<bitbucket-repo-link>=<github-repo-link>
-<bitbucket-repo-link>=<github-repo-link>
+https://stash.company.build/scm/folder/repo.git=https://github.com/company/repo.git
