@@ -1,4 +1,4 @@
-PR_URL="https://stash.jamf.build/projects/DOC/repos/mysql/pull-requests/131/overview"
+PR_URL="https://stash.company.build/projects/folder/repos/mysql/pull-requests/131/overview"
 
 for branch in $(git branch); do
     echo $branch;
