@@ -1,2 +1,4 @@
 .idea
 .DS_Store
+github_api/create_jwt/private_keys/zecops-packages.2023-08-02.private-key.pem
+.env
