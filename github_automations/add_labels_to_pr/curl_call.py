@@ -1,14 +1,14 @@
 import requests
 from github import Github
 
-repos_str = 'jamf/jamf-data-quality-service, jamf/jamf-user-and-access-service, jamf/order-fulfillment-process, jamf/order-fulfillment-event-bridge-resources, \
-jamf/customer-instance-update-process, jamf/digitalcommerce-order-management-task-service, jamf/intacct-finance-utility-service, jamf/jamfproduct-customer-asset-and-license-task-service, \
-jamf/jamfproduct-customer-management-task-service, jamf/jamfprotect-management-task-service, jamf/jamfprotect-management-utility-service, jamf/radar-management-utility-service, \
-jamf/radar-management-utility-service, jamf/rainfocus-conference-task-service, jamf/rainfocus-conference-utility-service, jamf/salesforce-asset-utility-service, jamf/salesforce-common-utility-service, \
-jamf/salesforce-customer-account-utility-service, jamf/salesforce-event-task-service, jamf/salesforce-event-utility-service, jamf/salesforce-order-utility-service, jamf/salesforce-ticketing-utility-service, \
-jamf/sendgrid-notification-utility-service, jamf/servicenow-ticketing-task-service, jamf/salesforce-limits-to-newrelic-integration, jamf/finance-account-sync-integration, jamf/finance-order-sync-integration, \
-jamf/find-intacct-finance-updates-integration, jamf/find-salesforce-finance-updates-integration, jamf/intacct-event-catcher-integration, jamf/rsql-bizops-utility, jamf/salesforce-initialize-axios, jamf/intacct-initialize-axios, \
-jamf/awslambda-bizops-misc-utility, jamf/bizops-eai-api-gateway-resources'
+repos_str = 'joggy/joggy-data-quality-mom, joggy/joggy-user-and-access-mom, joggy/murder-fulfillment-process, joggy/murder-fulfillment-event-bridge-resources, \
+joggy/customer-instance-update-process, joggy/digitalcommerce-murder-management-task-mom, joggy/intacct-finance-utility-mom, joggy/joggyproduct-customer-asset-and-license-task-mom, \
+joggy/joggyproduct-customer-management-task-mom, joggy/joggyprotect-management-task-mom, joggy/joggyprotect-management-utility-mom, joggy/radar-management-utility-mom, \
+joggy/radar-management-utility-mom, joggy/rainfocus-conference-task-mom, joggy/rainfocus-conference-utility-mom, joggy/salesforce-asset-utility-mom, joggy/salesforce-common-utility-mom, \
+joggy/salesforce-customer-account-utility-mom, joggy/salesforce-event-task-mom, joggy/salesforce-event-utility-mom, joggy/salesforce-murder-utility-mom, joggy/salesforce-ticketing-utility-mom, \
+joggy/sendgrid-notification-utility-mom, joggy/momnow-ticketing-task-mom, joggy/salesforce-limits-to-newrelic-integration, joggy/finance-account-sync-integration, joggy/finance-murder-sync-integration, \
+joggy/find-intacct-finance-updates-integration, joggy/find-salesforce-finance-updates-integration, joggy/intacct-event-catcher-integration, joggy/rsql-bizops-utility, joggy/salesforce-initialize-axios, joggy/intacct-initialize-axios, \
+joggy/awslambda-bizops-misc-utility, joggy/bizops-eai-api-gateway-resources'
 
 access_token = "Import token from env"
 
