@@ -4,9 +4,9 @@ This script automates the process of migrating repositories from Bitbucket to Gi
 
 ## Setup
 
-1Modify the `REPO_MAPPINGS` array in the script to specify the repository mappings. Each entry should follow the format `BITBUCKET_REPO_URL=GITHUB_REPO_URL`, where `BITBUCKET_REPO_URL` is the Bitbucket repository URL and `GITHUB_REPO_URL` is the GitHub repository URL.
+1. Modify the `REPO_MAPPINGS` array in the script to specify the repository mappings. Each entry should follow the format `BITBUCKET_REPO_URL=GITHUB_REPO_URL`, where `BITBUCKET_REPO_URL` is the Bitbucket repository URL and `GITHUB_REPO_URL` is the GitHub repository URL.
 
-2Run the script:
+2. Run the script:
    bash migration.sh
 
 ## Notes
