@@ -1,6 +1,5 @@
 import re
 
-
 input_text = """
   Composer.app/Folder1/Resources/Base.lproj/HeadMenu.nib  
   Composer.app/Folder1/Resources/DescriptionInfo.nib  
