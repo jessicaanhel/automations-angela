@@ -43,18 +43,28 @@ def get_github_access_token(jwt_token: str, installation_id: str) -> dict:
 
     return response.json()
 
+def build_github_app_token(app_id: str, private_key_path: str, installation_id: str) -> str:
+    """
+    Create a GitHub App installation token.
+    :return: access token string
+    """
+    signing_key = load_signing_key(private_key_path)
+    jwt_token = generate_jwt(app_id, signing_key)
+    access_token_data = get_github_access_token(jwt_token, installation_id)
+    return access_token_data['token']
+
 
 def main():
-    signing_key = load_signing_key(PRIVATE_KEY_PATH)
-    jwt_token = generate_jwt(APP_ID, signing_key)
-    print(f"✅ JWT generated successfully.\n")
+    if not all([APP_ID, INSTALLATION_ID, PRIVATE_KEY_PATH]):
+        print("Please set the GITHUB_APP_ID, GITHUB_INSTALLATION_ID, and GITHUB_PRIVATE_KEY_PATH environment variables.")
+        return
 
     try:
-        access_token_data = get_github_access_token(jwt_token, INSTALLATION_ID)
-        print("✅ Access token response:")
-        print(access_token_data)
+        token = build_github_app_token(APP_ID, PRIVATE_KEY_PATH, INSTALLATION_ID)
+        print("GitHub App token generated successfully:")
+        print(token)
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"Error: {e}")
 
 
 if __name__ == "__main__":
