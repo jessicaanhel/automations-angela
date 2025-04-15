@@ -3,8 +3,6 @@
 This automation checks your Apple Developer **certificates** and **provisioning profiles** for upcoming expirations and sends a summary to **Slack**.
 Ideal for teams who want proactive alerts before builds start failing due to expired assets.
 
----
-
 ## Features
 
 - Detects Apple certificates and provisioning profiles expiring soon
@@ -12,16 +10,12 @@ Ideal for teams who want proactive alerts before builds start failing due to exp
 - Sends detailed Slack notifications
 - Uses App Store Connect API key (no passwords or 2FA hassles)
 
----
-
 ## Requirements
 
 - macOS with [Homebrew](https://brew.sh)
 - Access to an Apple Developer account
 - A Slack Incoming Webhook URL
 - An App Store Connect API key in `.json` format
-
----
 
 ## Setup
 
