@@ -1,3 +1,4 @@
+#System files
 .idea
 .DS_Store
 .env
@@ -10,3 +11,6 @@
 *.p8
 *.json
 /.secure
+
+#Local projects
+clone_and_transfer_repo
