@@ -55,3 +55,10 @@ class SlackNotificationService:
         for username in slack_users:
             logging.info(f"Sending message to {username}")
             self.slack_notifier.send_message(username, message)
+
+    def log_unrecognized_users(self, email):
+        """Logs unrecognized usernames into a file"""
+        file_path = os.path.join(os.getcwd(), self.failed_output_file)
+        with open(file_path, "a") as f:
+            f.write(github_login)
+        logging.info(f"User with email {github_login} doesn't exist in slack. Added to unrecognized_usernames.txt")
