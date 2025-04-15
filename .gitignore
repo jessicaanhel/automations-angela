@@ -4,3 +4,5 @@
 *.pem
 */*.pem
 */*/*.pem
+
+clone_and_transfer_repo
