@@ -1,48 +1,74 @@
 import re
+from typing import List, Tuple
 
-def extract_file_paths(input_text):
-    lines = input_text.split('\n')
-    file_paths = []
+
+def parse_string_to_list(long_string: str, pattern: str = r'(.*C.+)$') -> List[str]:
+    """
+    Parse a multi-line string into a list, optionally filtering lines via regex.
+    Default regex extracts lines containing 'C' and anything after.
+    """
+    lines = long_string.strip().split('\n')
+    parsed_lines = []
 
     for line in lines:
-        match = re.search(r'(.*C.+)$', line)
+        match = re.search(pattern, line.strip())
         if match:
-            file_paths.append(match.group(1).strip())
+            parsed_lines.append(match.group(1).strip())
 
-    return file_paths
+    return parsed_lines
 
 
-
-def find_differences(list1, list2):
+def find_differences(list1: List[str], list2: List[str]) -> Tuple[List[str], List[str]]:
+    """
+    Find items unique to each list.
+    Returns two lists:
+    - items in list1 but not in list2
+    - items in list2 but not in list1
+    """
     set1 = set(list1)
     set2 = set(list2)
 
-    unique_to_list1 = set1 - set2
-    unique_to_list2 = set2 - set1
+    unique_to_list1 = sorted(set1 - set2)
+    unique_to_list2 = sorted(set2 - set1)
 
-    return list(unique_to_list1), list(unique_to_list2)
+    return unique_to_list1, unique_to_list2
 
-#Define the lists to compare
-list_as_string = """
-  Composer.app/Folder1/Resources/Base.lproj/HeadMenu.nib  
-  Composer.app/Folder1/Resources/DescriptionInfo.nib  
-  Composer.app/Folder1/Resources/FullTrashIcon@2x.icns  
-  Composer.app/Folder1/Resources/composerWatermark.png  
-"""
 
-compare_list = [
-    "Composer.app/Folder1/Resources/permissionsGradient.png",
-    "Composer.app/Folder1/Resources/DownloadCheck.SHELL",
-    "Composer.app/Folder1/Resources/DescriptionPlistInfo.nib",
-    "Composer.app/Folder1/Resources/HeadComposerWindow.nib/keyedobjects-110000.nib",
-]
+def print_differences(list_name: str, differences: List[str]) -> None:
+    """
+    Print the differences in a readable format.
+    """
+    if differences:
+        print(f"\n🟠 Unique to {list_name} ({len(differences)}):")
+        for item in differences:
+            print(f"  - {item}")
+    else:
+        print(f"\n✅ No unique items in {list_name}.")
 
-#Call to action
-string_list = extract_file_paths(list_as_string)
-differencesB, differencesA = find_differences(compare_list, string_list)
 
-print(f"unique to the compared list: {len(differencesB)}")
-print(differencesB)
+def main():
+    list_as_string = """
+      Composer.app/Folder1/Resources/Base.lproj/HeadMenu.nib  
+      Composer.app/Folder1/Resources/DescriptionInfo.nib  
+      Composer.app/Folder1/Resources/FullTrashIcon@2x.icns  
+      Composer.app/Folder1/Resources/composerWatermark.png  
+    """
 
-print(f"\nunique to the list_as_string: {len(differencesA)}")
-print(differencesA)
+    compare_list = [
+        "Composer.app/Folder1/Resources/permissionsGradient.png",
+        "Composer.app/Folder1/Resources/DownloadCheck.SHELL",
+        "Composer.app/Folder1/Resources/DescriptionPlistInfo.nib",
+        "Composer.app/Folder1/Resources/HeadComposerWindow.nib/keyedobjects-110000.nib",
+    ]
+
+    # Parse and compare
+    parsed_list = parse_string_to_list(list_as_string)
+    only_in_compare_list, only_in_parsed_list = find_differences(compare_list, parsed_list)
+
+    # Display results
+    print_differences("compare_list", only_in_compare_list)
+    print_differences("list_as_string", only_in_parsed_list)
+
+
+if __name__ == "__main__":
+    main()
