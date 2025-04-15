@@ -1,6 +1,8 @@
 #System files
 .idea
 .DS_Store
+*/*/__pycache__/
+
 .env
 */*.env
 *.pem
