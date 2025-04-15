@@ -2,19 +2,12 @@ import re
 from typing import List, Tuple
 
 
-def parse_string_to_list(long_string: str, pattern: str = r'(.*C.+)$') -> List[str]:
+def parse_string_to_list(long_string: str) -> List[str]:
     """
-    Parse a multi-line string into a list, optionally filtering lines via regex.
-    Default regex extracts lines containing 'C' and anything after.
+    Parse a multi-line string into a list, stripping leading/trailing whitespace.
     """
     lines = long_string.strip().split('\n')
-    parsed_lines = []
-
-    for line in lines:
-        match = re.search(pattern, line.strip())
-        if match:
-            parsed_lines.append(match.group(1).strip())
-
+    parsed_lines = [line.strip() for line in lines if line.strip()]
     return parsed_lines
 
 
@@ -48,17 +41,17 @@ def print_differences(list_name: str, differences: List[str]) -> None:
 
 def main():
     list_as_string = """
-      Composer.app/Folder1/Resources/Base.lproj/HeadMenu.nib  
-      Composer.app/Folder1/Resources/DescriptionInfo.nib  
+      Composer.app/Folder1/Resources/DownloadCheck.SHELL  
+      Composer.app/Folder1/Greeds/HeadComposerWindow.nib/keyobjects-1000.nib  
       Composer.app/Folder1/Resources/FullTrashIcon@2x.icns  
-      Composer.app/Folder1/Resources/composerWatermark.png  
+      Composer.app/Folder2/Resources/composerWatermark.png  
     """
 
     compare_list = [
         "Composer.app/Folder1/Resources/permissionsGradient.png",
         "Composer.app/Folder1/Resources/DownloadCheck.SHELL",
-        "Composer.app/Folder1/Resources/DescriptionPlistInfo.nib",
-        "Composer.app/Folder1/Resources/HeadComposerWindow.nib/keyedobjects-110000.nib",
+        "Composer.app/Folder1/Greeds/DescriptionPlistInfo.nib",
+        "Composer.app/Folder1/Greeds/HeadComposerWindow.nib/keyobjects-1000.nib",
     ]
 
     # Parse and compare
