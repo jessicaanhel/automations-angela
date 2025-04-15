@@ -1,6 +1,12 @@
 .idea
 .DS_Store
 .env
+*/*.env
 *.pem
 */*.pem
 */*/*.pem
+
+#Apple files
+*.p8
+*.json
+/.secure
