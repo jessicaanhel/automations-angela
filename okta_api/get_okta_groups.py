@@ -8,7 +8,7 @@ load_dotenv()
 
 CLIENT_ID = os.getenv("OKTA_CLIENT_ID")
 SCOPES = ["okta.users.read", "okta.groups.read"]
-OKTA_GROUP_NAME = "GitHub_Angry_Cockroaches_Admin"
+OKTA_GROUP_NAME = "GitHub_Team_Admin"
 PRIVATE_KEY_PATH = os.path.abspath("privateKey.pem")
 
 OKTA_ORG_URL = os.getenv("OKTA_ORG_URL")
