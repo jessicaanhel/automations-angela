@@ -27,13 +27,10 @@ Ideal for teams who want proactive alerts before builds start failing due to exp
 ## ⚙️ Setup
 
 ### 1. 📦 Install Fastlane
-
 ```bash
 brew install fastlane
 ```
-
-
-## App Store Connect API Key Setup
+### 2. Create App Store Connect API Key
 
 1. Go to [App Store Connect → Users and Access → Keys](https://appstoreconnect.apple.com/access/api).
 2. Create a new key and download the `.p8` file.
@@ -47,13 +44,13 @@ brew install fastlane
 }
 ```
 
-## Configure Slack Webhook
+### 3. Configure Slack Webhook
 1. Go to your Slack workspace → Integrations → Incoming Webhooks
 2. Create a new webhook and copy the URL
 3. Set it in your .env
 
 
-## To Run The Lane
+### 4. To Run The Lane
 1. Clone the repository
 2. Navigate to the directory
 3. Run the lane:
