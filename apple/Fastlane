@@ -1,0 +1,41 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Check for expiring certs and profiles, and send Slack notification"
+  lane :check_expiry do
+    api_key = app_store_connect_api_key(
+      key_filepath: ENV["APP_STORE_CONNECT_API_KEY_PATH"]
+    )
+
+    Spaceship::ConnectAPI.token = api_key
+
+    require 'date'
+    slack_url = ENV["SLACK_WEBHOOK_URL"]
+    days_threshold = 30
+
+    certs = Spaceship.certificate.all
+    profiles = Spaceship.provisioning_profile.all
+
+    now = Date.today
+    expiring_certs = certs.select { |c| c.expires && (c.expires.to_date - now).to_i <= days_threshold }
+    expiring_profiles = profiles.select { |p| p.expires && (p.expires.to_date - now).to_i <= days_threshold }
+
+    if expiring_certs.empty? && expiring_profiles.empty?
+      slack_message = "✅ All certificates and provisioning profiles are valid for more than #{days_threshold} days."
+    else
+      slack_message = "*⚠️ Certificates/Profiles expiring soon:*"
+      expiring_certs.each do |cert|
+        slack_message += "\n🔐 *Cert:* #{cert.name} - Expires: #{cert.expires.strftime('%Y-%m-%d')}"
+      end
+      expiring_profiles.each do |profile|
+        slack_message += "\n📄 *Profile:* #{profile.name} - Expires: #{profile.expires.strftime('%Y-%m-%d')}"
+      end
+    end
+
+    slack(
+      message: slack_message,
+      webhook_url: slack_url,
+      default_payloads: []
+    )
+  end
+end

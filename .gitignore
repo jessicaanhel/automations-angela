@@ -1,6 +1,16 @@
+#System files
 .idea
 .DS_Store
 .env
+*/*.env
 *.pem
 */*.pem
 */*/*.pem
+
+#Apple files
+*.p8
+*.json
+/.secure
+
+#Local projects
+_local_projects/*
