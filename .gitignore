@@ -13,4 +13,4 @@
 /.secure
 
 #Local projects
-clone_and_transfer_repo
+_local_projects/*
