@@ -1,4 +1,4 @@
-# Apple Certificate & Provisioning Profile Expiry Notifier
+# Apple Certificate & Provisioning Profile Expiry Slack Notifier
 
 This automation checks your Apple Developer **certificates** and **provisioning profiles** for upcoming expirations and sends a summary to **Slack**.
 Ideal for teams who want proactive alerts before builds start failing due to expired assets.
