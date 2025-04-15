@@ -6,23 +6,32 @@ Ideal for teams who want proactive alerts before builds start failing due to exp
 
 ---
 
-## Features
+## 🚀 Features
 
-- ✅ Checks all available Apple certificates and provisioning profiles
-- 📅 Warns if anything expires within a configurable number of days (default: 30)
-- 🔔 Sends a formatted Slack message with details
-- 🔒 Uses App Store Connect API key (recommended for CI/CD and security)
+- ✅ Detects Apple certificates and provisioning profiles expiring soon
+- 📅 Configurable expiry warning window (default: 30 days)
+- 🔔 Sends detailed Slack notifications
+- 🔐 Uses App Store Connect API key (no passwords or 2FA hassles)
+
+---
+
+## 🛠️ Requirements
+
+- macOS with [Homebrew](https://brew.sh)
+- Access to an Apple Developer account
+- A Slack Incoming Webhook URL
+- An App Store Connect API key in `.json` format
 
 ---
 
-## Prerequisites
+## ⚙️ Setup
 
-- [Fastlane](https://docs.fastlane.tools/)
-- Ruby installed (via Homebrew or rbenv)
-- Slack Incoming Webhook URL
-- App Store Connect API Key (downloaded `.json` file)
+### 1. 📦 Install Fastlane
 
----
+```bash
+brew install fastlane
+```
+
 
 ## App Store Connect API Key Setup
 
@@ -38,15 +47,28 @@ Ideal for teams who want proactive alerts before builds start failing due to exp
 }
 ```
 
+## Configure Slack Webhook
+1. Go to your Slack workspace → Integrations → Incoming Webhooks
+2. Create a new webhook and copy the URL
+3. Set it in your .env
+
+
 ## To Run The Lane
 1. Clone the repository
 2. Navigate to the directory
 3. Run the lane:
 ```bash
-bundle exec fastlane check_expiry
+fastlane check_expiry
 ```
 
 ## Slack Message Example
 ⚠️ Certificates/Profiles expiring soon:
 🔐 Cert: iOS Distribution - Expires: 2025-04-30
 📄 Profile: MyApp_Dev - Expires: 2025-04-25
+
+If nothing’s expiring soon, it will send:
+✅ All certificates and provisioning profiles are valid for more than 30 days.
+
+##
+Made with ❤️ for automation-loving iOS teams.
+PRs, feedback, and forks are welcome!
