@@ -1,0 +1,57 @@
+name: Sonar for Python
+
+on:
+  workflow_dispatch:
+    inputs:
+      sonar_host:
+        description: Sonar host
+        required: true
+      sonar_token:
+        description: Sonar token to use for authentication
+        required: true
+      sonar_project_name:
+        description: Sonar project name
+        default: 'automations-project'
+        required: true
+      sonar_project_key:
+        description: Sonar project key
+        default: 'automations.project.1.0'
+        required: true
+
+jobs:
+
+  sonar:
+    name: Sonar
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: "SonarQube Scan for Python"
+        uses: sonarsource/sonarqube-scan-action@v2
+        env:
+          SONAR_TOKEN: ${{ inputs.sonar_token }}
+          SONAR_HOST_URL: ${{ inputs.sonar_host }}
+          with:
+            args: >
+              -Dsonar.python.version=3
+              -Dsonar.python.coverage.reportPaths=coverage.xml
+              -Dsonar.projectName=${{ inputs.sonar_project_name }}
+              -Dsonar.projectKey=${{ inputs.sonar_project_key }}
+
+      - name: "SonarQube Quality Gate check"
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        env:
+          SONAR_TOKEN: ${{ inputs.sonar_token }}
+          SONAR_HOST_URL: ${{ inputs.sonar_host }}
+
+      - name: "SonarQube Quality Gate Error"
+        if: ${{ failure() && steps.sonarqube-quality-gate-check.conclusion == 'failure' }}
+        shell: sh
+        run: |
+          echo "### :x: The Quality Gate status failed ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "${{ inputs.sonar_host }}/dashboard?id=${{ inputs.sonar_project_key }}&pullRequest=${{ github.event.number }}" >> $GITHUB_STEP_SUMMARY
