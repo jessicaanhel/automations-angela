@@ -1,6 +1,7 @@
 import time
 import requests
-from jwt import JWT, jwk_from_pem
+import jwt
+import cryptography
 
 # Constants
 APP_ID = '331327'
@@ -13,7 +14,7 @@ JWT_EXPIRATION_SECONDS = 600
 def load_signing_key(pem_path: str):
     """Load a private signing key from a PEM file."""
     with open(pem_path, 'rb') as pem_file:
-        return jwk_from_pem(pem_file.read())
+        return pem_file.read()
 
 
 def generate_jwt(app_id: str, signing_key) -> str:
@@ -24,8 +25,7 @@ def generate_jwt(app_id: str, signing_key) -> str:
         'iss': app_id
     }
 
-    jwt_instance = JWT()
-    return jwt_instance.encode(payload, signing_key, alg='RS256')
+    return jwt.encode(payload, signing_key, algorithm='RS256')
 
 
 def get_github_access_token(jwt_token: str, installation_id: str) -> dict:
@@ -61,8 +61,8 @@ def main():
 
     try:
         token = build_github_app_token(APP_ID, PRIVATE_KEY_PATH, INSTALLATION_ID)
-        print("GitHub App token generated successfully:")
-        print(token)
+        print(f"GitHub App token generated successfully: '{token[-5:]}...{token[:5]}'")
+        print()
     except Exception as e:
         print(f"Error: {e}")
 

@@ -1,7 +1,12 @@
 import logging
+import os
 import requests
+
 from typing import List, Optional, Dict
-from github_automations.github_app_token.get_github_app_token import build_github_app_token
+from github_automations.github_api.github_app_token import build_github_app_token
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class GitHubAPI:
@@ -65,23 +70,6 @@ class GitHubAPI:
             page += 1
         return repos
 
-    def get_open_pull_request(self, repo_name: str, pr_title: str) -> Optional[Dict]:
-        if self.entity_type == 'Unknown':
-            logging.error(f"Cannot fetch PRs for '{self.name}'. Entity type is unknown.")
-            return None
-
-        repo_full_name = f"{self.name}/{repo_name}"
-        url = f"https://api.github.com/repos/{repo_full_name}/pulls?state=open"
-        response = requests.get(url, headers=self.headers)
-        if response.status_code != 200:
-            logging.error(f"Error fetching PRs for '{repo_full_name}'. Status: {response.status_code}")
-            return None
-
-        for pr in response.json():
-            if pr.get('title') == pr_title:
-                return pr
-        return None
-
 
     def get_default_branch(self, repo_name: str) -> Optional[str]:
         if self.entity_type == 'Unknown':
@@ -94,3 +82,36 @@ class GitHubAPI:
             return response.json().get("default_branch")
         logging.error(f"Failed to fetch default branch for '{repo_name}'. Status: {response.status_code}")
         return None
+
+
+    def get_team_id_and_org_id(self,  team_slug):
+        """Only for organization accounts"""
+        url = f"https://api.github.com/orgs/{self.name}/teams/{team_slug}"
+        response = requests.get(url, headers=self.headers)
+        response.raise_for_status()
+        data = response.json()
+        return data["id"], data["organization"]["id"]
+
+
+    def list_idp_groups_for_team(self, team_slug):
+        """Only for organization accounts"""
+        try:
+            team_id, org_id = self.get_team_id_and_org_id(team_slug)
+            url = f"https://api.github.com/organizations/{org_id}/team/{team_id}/team-sync/group-mappings"
+            owner_token = os.getenv("OWNER_TOKEN")
+            logger.info("Personal access token detected: " + "******" + owner_token[-10:] )
+            headers_pat = {
+                'Authorization': f'token {owner_token}',
+                'Accept': 'application/vnd.github+json',
+                'X-GitHub-Api-Version': '2022-11-28'
+            }
+            response = requests.get(url, headers=headers_pat)
+            response.raise_for_status()
+            group_details = response.json().get("groups")
+
+            #Return the first and only one group name
+            return group_details[0].get("group_name")
+
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Error fetching IDP groups: {e}. Check App permissions")
+            return []
