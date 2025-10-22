@@ -41,15 +41,14 @@ def create_label_for_repo(repo_name: str, label_name: str, label_color: str) -> 
         print(response.text)
 
 
-def main():
-    repos_input = 'automations-angela, photo-manager'
-    repos = convert_to_list(repos_input)
-    label_name = "python"
-    label_color = "006b75"
-
+def main(repo_names, label_name, label_color):
+    repos = convert_to_list(repo_names)
     for repo in repos:
         create_label_for_repo(repo, label_name, label_color)
 
 
 if __name__ == "__main__":
-    main()
+    repos_input = 'automations-angela, photo-manager'
+    label_name = "python"
+    label_color = "006b75"
+    main(repos_input, label_name, label_color)
