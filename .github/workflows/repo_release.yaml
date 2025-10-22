@@ -1,0 +1,80 @@
+name: New Release for ${{ github.event.repository.name }}
+run-name: ${{ github.event.inputs.release_type }} release started by @${{ github.actor }}
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: Release Type
+        required: false
+        type: choice
+        default: patch
+        options:
+          - patch
+          - minor
+          - major
+
+concurrency:
+  group: ${{ github.workflow }}
+
+env:
+  PYTHON_VERSION: "3.12"
+
+jobs:
+  create_release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Get New Version
+        id: get-version
+        run: |
+          python -m venv /tmp/semver-venv
+          source /tmp/semver-venv/bin/activate
+          pip install -r tools/semver/requirements.txt
+
+          CURRENT_VERSION=$(git tag --sort -v:refname | head -n1 | sed -E 's/v(.*)/\1/')
+          CURRENT_VERSION="${CURRENT_VERSION:-0.0.0}"
+
+          echo "Current version: ${CURRENT_VERSION}"
+          echo "current-version=${CURRENT_VERSION}" >> ${GITHUB_OUTPUT}
+          NEW_VERSION=$(pysemver bump ${{ inputs.release_type }} ${CURRENT_VERSION})
+          echo "New version: ${NEW_VERSION}"
+          echo "new-version=${NEW_VERSION}" >> ${GITHUB_OUTPUT}
+          NEW_MAJOR=$(echo ${NEW_VERSION} | sed -E 's/([0-9]+)\..*/\1/')
+          echo "New major: ${NEW_MAJOR}"
+          echo "new-major=${NEW_MAJOR}" >> ${GITHUB_OUTPUT}
+
+      - name: Update Git Config User
+        run: |
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
+
+      - name: Create/Update Tag for Major Version v${{ steps.get-version.outputs.new-major }}
+        run: |
+          # Be careful with `-f`, it will overwrite existing tags on the repo.
+          git tag -f v${{ steps.get-version.outputs.new-major }}
+          git push origin v${{ steps.get-version.outputs.new-major }} --force
+
+      - name: Create Tag v${{ steps.get-version.outputs.new-version }}
+        run: |
+          # Do not use `-f` here, we never want to overwrite existing tags on the repo.
+          git tag v${{ steps.get-version.outputs.new-version }}
+          git push origin v${{ steps.get-version.outputs.new-version }}
+
+      - name: Create Release
+        run: gh release create v${{ steps.get-version.outputs.new-version }} --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
